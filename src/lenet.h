@@ -20,7 +20,7 @@
 #include "./layer/fully_connected.h"
 #include "./layer/softmax.h"
 #include "./layer/relu.h"
-
+#include "./layer/conv_gpu.h"
 /**
  * @brief Create the lenet 5 network that we will use for this project.
  * 
@@ -28,5 +28,6 @@
  * @return Network object with layers added (and parameters loaded if parameter_filepath is not empty)
  */
 Network create_lenet5_network(const std::string& parameter_filepath = "");
+Network create_lenet5_network_gpu(const std::string& parameter_filepath = "");
 
 #endif // LENET_H
