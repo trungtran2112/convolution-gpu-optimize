@@ -7,7 +7,6 @@ void Network::forward(const Matrix &input)
   layers[0]->forward(input);
   for (int i = 1; i < layers.size(); i++)
   {
-    std::cout << "layer " << i << std::endl;
     layers[i]->forward(layers[i - 1]->output());
   }
 }
@@ -128,7 +127,7 @@ void Network::check_gradient(const Matrix &input, const Matrix &target,
 
 void Network::save_parameters(const std::string &filename)
 {
-  std::ofstream file(filename, std::ios::binary | std::ios::out);
+  std::ofstream file(filename, std::ios::binary | std::ios::out | std::ios::trunc);
   uint64_t expected_file_size = 0;
 
   if (file.is_open() == false)
@@ -136,8 +135,6 @@ void Network::save_parameters(const std::string &filename)
     std::cout << "Unable to open file: " << filename << std::endl;
     return;
   }
-
-  std::cout << "Saving parameters to " << filename << " ..." << std::endl;
 
   const int n_layer = layers.size();
   file.write(reinterpret_cast<const char *>(&n_layer), sizeof(n_layer));
@@ -149,13 +146,12 @@ void Network::save_parameters(const std::string &filename)
   {
     const int n_param = layer_params.size();
     file.write(reinterpret_cast<const char *>(&n_param), sizeof(n_param));
+
+    if (n_param > 0)
+      file.write(reinterpret_cast<const char *>(&layer_params[0]), sizeof(float) * n_param);
+
     expected_file_size += sizeof(n_param);
     expected_file_size += sizeof(float) * n_param;
-
-    for (const auto &param : layer_params)
-    {
-      file.write(reinterpret_cast<const char *>(&param), sizeof(param));
-    }
   }
 
   std::streampos real_file_size = file.tellp();
@@ -168,7 +164,7 @@ void Network::save_parameters(const std::string &filename)
   }
 
   file.close();
-  std::cout << "Saving done." << std::endl;
+  std::cout << "Parameters saved to \"" << filename << "\"." << std::endl;
 }
 
 void Network::load_parameters(const std::string &filename)
@@ -177,11 +173,9 @@ void Network::load_parameters(const std::string &filename)
 
   if (file.is_open() == false)
   {
-    std::cout << "Unable to open file: " << filename << " to load parameters." << std::endl;
+    std::cout << "Unable to open file: \"" << filename << "\" to load parameters." << std::endl;
     return;
   }
-
-  std::cout << "Loading parameters from " << filename << " ..." << std::endl;
 
   int n_layer = 0;
   file.read(reinterpret_cast<char *>(&n_layer), sizeof(n_layer));
@@ -207,5 +201,7 @@ void Network::load_parameters(const std::string &filename)
     all_layers_params.push_back(layer_params);
   }
 
+  file.close();
   this->set_parameters(all_layers_params);
+  std::cout << "Parameters loaded from \"" << filename << "\"." << std::endl;
 }

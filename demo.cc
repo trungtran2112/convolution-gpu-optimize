@@ -23,6 +23,7 @@
 #include "src/network.h"
 #include "src/optimizer.h"
 #include "src/optimizer/sgd.h"
+#include "src/lenet.h"
 
 int main()
 {
@@ -33,53 +34,8 @@ int main()
   int dim_in = dataset.train_data.rows();
   std::cout << "fashion mnist train number: " << n_train << std::endl;
   std::cout << "fashion mnist test number: " << dataset.test_labels.cols() << std::endl;
-  // dnn
-  // Network dnn;
-  // Layer* conv1 = new Conv(1, 28, 28, 4, 5, 5, 2, 2, 2);
-  // Layer* pool1 = new MaxPooling(4, 14, 14, 2, 2, 2);
-  // Layer* conv2 = new Conv(4, 7, 7, 16, 5, 5, 1, 2, 2);
-  // Layer* pool2 = new MaxPooling(16, 7, 7, 2, 2, 2);
-  // Layer* fc3 = new FullyConnected(pool2->output_dim(), 32);
-  // Layer* fc4 = new FullyConnected(32, 10);
-  // Layer* relu1 = new ReLU;
-  // Layer* relu2 = new ReLU;
-  // Layer* relu3 = new ReLU;
-  // Layer* softmax = new Softmax;
-  // dnn.add_layer(conv1);
-  // dnn.add_layer(relu1);
-  // dnn.add_layer(pool1);
-  // dnn.add_layer(conv2);
-  // dnn.add_layer(relu2);
-  // dnn.add_layer(pool2);
-  // dnn.add_layer(fc3);
-  // dnn.add_layer(relu3);
-  // dnn.add_layer(fc4);
-  // dnn.add_layer(softmax);
 
-  Network dnn;
-  Layer *conv1 = new Conv(1, 28, 28, 6, 5, 5);
-  Layer *pool1 = new MaxPooling(6, 24, 24, 2, 2, 2);
-  Layer *conv2 = new Conv(6, 12, 12, 16, 5, 5);
-  Layer *pool2 = new MaxPooling(16, 8, 8, 2, 2, 2);
-  // std::cout << pool2->output_dim() << std::endl; // 256
-  Layer *fc3 = new FullyConnected(pool2->output_dim(), 120);
-  Layer *fc4 = new FullyConnected(120, 84);
-  Layer *fc5 = new FullyConnected(84, 10);
-  Layer *relu1 = new ReLU;
-  Layer *relu2 = new ReLU;
-  Layer *relu3 = new ReLU;
-  Layer *softmax = new Softmax;
-  dnn.add_layer(conv1);
-  dnn.add_layer(relu1);
-  dnn.add_layer(pool1);
-  dnn.add_layer(conv2);
-  dnn.add_layer(relu2);
-  dnn.add_layer(pool2);
-  dnn.add_layer(fc3);
-  dnn.add_layer(relu3);
-  dnn.add_layer(fc4);
-  dnn.add_layer(fc5);
-  dnn.add_layer(softmax);
+  Network dnn = create_lenet5_network();
 
   // loss
   Loss *loss = new CrossEntropy;
@@ -87,9 +43,8 @@ int main()
   // train & test
   SGD opt(0.001, 5e-4, 0.9, true);
   // SGD opt(0.001);
-  const int n_epoch = 5;
+  const int n_epoch = 10;
   const int batch_size = 128;
-  std::cout << "Hello from demo.cc" << std::endl;
   for (int epoch = 0; epoch < n_epoch; epoch++)
   {
     shuffle_data(dataset.train_data, dataset.train_labels);
@@ -126,11 +81,11 @@ int main()
   }
 
   // save parameters
-  char option;
-  std::cout << "Save parameters? (y/n)" << std::endl;
-  std::cin >> option;
-  if (option == 'y' || option == 'Y')
-    dnn.save_parameters("..\\weight.bin");
+  // char option;
+  // std::cout << "Save parameters? (y/n)" << std::endl;
+  // std::cin >> option;
+  // if (option == 'y' || option == 'Y')
+  dnn.save_parameters("weight.bin");
 
   return 0;
 }

@@ -14,6 +14,7 @@ Network create_lenet5_network(const std::string& parameter_filepath)
     Layer *relu1 = new ReLU;
     Layer *relu2 = new ReLU;
     Layer *relu3 = new ReLU;
+    Layer *relu4 = new ReLU;
     Layer *softmax = new Softmax;
 
     dnn.add_layer(conv1);
@@ -25,6 +26,7 @@ Network create_lenet5_network(const std::string& parameter_filepath)
     dnn.add_layer(fc3);
     dnn.add_layer(relu3);
     dnn.add_layer(fc4);
+    dnn.add_layer(relu4);
     dnn.add_layer(fc5);
     dnn.add_layer(softmax);
 
