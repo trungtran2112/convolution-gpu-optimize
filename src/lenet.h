@@ -28,6 +28,6 @@
  * @return Network object with layers added (and parameters loaded if parameter_filepath is not empty)
  */
 Network create_lenet5_network(const std::string& parameter_filepath = "");
-Network create_lenet5_network_gpu(const std::string& parameter_filepath = "");
+Network create_lenet5_network_gpu(const std::string& parameter_filepath = "", bool multi_stream = false);
 
 #endif // LENET_H
