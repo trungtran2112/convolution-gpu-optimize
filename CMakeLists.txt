@@ -1,18 +1,18 @@
-cmake_minimum_required (VERSION 3.5)
+cmake_minimum_required (VERSION 3.0)
 project (myproject)
+enable_language(CUDA)
+find_package(CUDA REQUIRED)	#find the CUDA libraries
+include_directories(${CUDA_INCLUDE_DIRS})	#Specify the CUDA include directories for the project
+
 include_directories ("${PROJECT_SOURCE_DIR}/third_party/eigen")
-
-# Collect all source files in the current directory
+# 查找当前目录下的所有源文件
+# 并将名称保存到 DIR_SRCS 变量
 aux_source_directory(. DIR_SRCS)
-
-# Add the src subdirectory
+# 添加 math 子目录
 add_subdirectory(src)
+# 指定生成目标 
 
-# Add the executable
-add_executable(demo demo.cc)
 add_executable(main main.cpp)
-
-# Link the executable to the library
-target_link_libraries(demo MiniDNNLib)
+# 添加链接库
 target_link_libraries(main MiniDNNLib)
-
+target_link_libraries(main MiniDNNLib ${CUDA_LIBRARIES})    #Link the CUDA libraries to the project
