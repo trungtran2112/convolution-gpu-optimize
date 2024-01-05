@@ -24,8 +24,8 @@
 #include "src/optimizer.h"
 #include "src/optimizer/sgd.h"
 
-
-int main() {
+int main()
+{
   // data
   MNIST dataset("../data/fashion mnist/");
   dataset.read();
@@ -33,7 +33,7 @@ int main() {
   int dim_in = dataset.train_data.rows();
   std::cout << "fashion mnist train number: " << n_train << std::endl;
   std::cout << "fashion mnist test number: " << dataset.test_labels.cols() << std::endl;
-  // // dnn
+  // dnn
   // Network dnn;
   // Layer* conv1 = new Conv(1, 28, 28, 4, 5, 5, 2, 2, 2);
   // Layer* pool1 = new MaxPooling(4, 14, 14, 2, 2, 2);
@@ -57,18 +57,18 @@ int main() {
   // dnn.add_layer(softmax);
 
   Network dnn;
-  Layer* conv1 = new Conv(1, 28, 28, 6, 5, 5);
-  Layer* pool1 = new MaxPooling(6, 24, 24, 2, 2, 2);
-  Layer* conv2 = new Conv(6, 14, 14, 16, 5, 5);
-  Layer* pool2 = new MaxPooling(16, 8, 8, 2, 2, 2);
+  Layer *conv1 = new Conv(1, 28, 28, 6, 5, 5);
+  Layer *pool1 = new MaxPooling(6, 24, 24, 2, 2, 2);
+  Layer *conv2 = new Conv(6, 12, 12, 16, 5, 5);
+  Layer *pool2 = new MaxPooling(16, 8, 8, 2, 2, 2);
   // std::cout << pool2->output_dim() << std::endl; // 256
-  Layer* fc3 = new FullyConnected(pool2->output_dim(), 120);
-  Layer* fc4 = new FullyConnected(120, 84);
-  Layer* fc5 = new FullyConnected(84, 10);
-  Layer* relu1 = new ReLU;
-  Layer* relu2 = new ReLU;
-  Layer* relu3 = new ReLU;
-  Layer* softmax = new Softmax;
+  Layer *fc3 = new FullyConnected(pool2->output_dim(), 120);
+  Layer *fc4 = new FullyConnected(120, 84);
+  Layer *fc5 = new FullyConnected(84, 10);
+  Layer *relu1 = new ReLU;
+  Layer *relu2 = new ReLU;
+  Layer *relu3 = new ReLU;
+  Layer *softmax = new Softmax;
   dnn.add_layer(conv1);
   dnn.add_layer(relu1);
   dnn.add_layer(pool1);
@@ -81,34 +81,38 @@ int main() {
   dnn.add_layer(fc5);
   dnn.add_layer(softmax);
 
-
   // loss
-  Loss* loss = new CrossEntropy;
+  Loss *loss = new CrossEntropy;
   dnn.add_loss(loss);
   // train & test
   SGD opt(0.001, 5e-4, 0.9, true);
   // SGD opt(0.001);
   const int n_epoch = 5;
   const int batch_size = 128;
-  for (int epoch = 0; epoch < n_epoch; epoch ++) {
+  std::cout << "Hello from demo.cc" << std::endl;
+  for (int epoch = 0; epoch < n_epoch; epoch++)
+  {
     shuffle_data(dataset.train_data, dataset.train_labels);
-    for (int start_idx = 0; start_idx < n_train; start_idx += batch_size) {
+    for (int start_idx = 0; start_idx < n_train; start_idx += batch_size)
+    {
       int ith_batch = start_idx / batch_size;
       Matrix x_batch = dataset.train_data.block(0, start_idx, dim_in,
-                                    std::min(batch_size, n_train - start_idx));
+                                                std::min(batch_size, n_train - start_idx));
       Matrix label_batch = dataset.train_labels.block(0, start_idx, 1,
-                                    std::min(batch_size, n_train - start_idx));
+                                                      std::min(batch_size, n_train - start_idx));
       Matrix target_batch = one_hot_encode(label_batch, 10);
-      if (false && ith_batch % 10 == 1) {
+      if (false && ith_batch % 30 == 1)
+      {
         std::cout << ith_batch << "-th grad: " << std::endl;
         dnn.check_gradient(x_batch, target_batch, 10);
       }
       dnn.forward(x_batch);
       dnn.backward(x_batch, target_batch);
       // display
-      if (ith_batch % 50 == 0) {
+      if (ith_batch % 50 == 0)
+      {
         std::cout << ith_batch << "-th batch, loss: " << dnn.get_loss()
-        << std::endl;
+                  << std::endl;
       }
       // optimize
       dnn.update(opt);
@@ -120,6 +124,13 @@ int main() {
     std::cout << epoch + 1 << "-th epoch, test acc: " << acc << std::endl;
     std::cout << std::endl;
   }
+
+  // save parameters
+  char option;
+  std::cout << "Save parameters? (y/n)" << std::endl;
+  std::cin >> option;
+  if (option == 'y' || option == 'Y')
+    dnn.save_parameters("..\\weight.bin");
+
   return 0;
 }
-

@@ -25,6 +25,7 @@ class Layer {
   virtual std::vector<float> get_derivatives() const
           { return std::vector<float>(); }
   virtual void set_parameters(const std::vector<float>& param) {}
+  virtual bool is_custom_convolution() { return false; };
 };
 
 #endif  // SRC_LAYER_H_

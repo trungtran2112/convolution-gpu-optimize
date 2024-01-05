@@ -37,6 +37,9 @@ void MNIST::read_mnist_data(std::string filename, Matrix& data) {
       }
     }
   }
+  else {
+    std::cout << "Unable to open file: " << filename << std::endl;
+  }
 }
 
 void MNIST::read_mnist_label(std::string filename, Matrix& labels) {
@@ -55,6 +58,9 @@ void MNIST::read_mnist_label(std::string filename, Matrix& labels) {
       file.read((char*)&label, sizeof(label));
       labels(0, i) = (float)label;
     }
+  }
+  else {
+    std::cout << "Unable to open file: " << filename << std::endl;
   }
 }
 

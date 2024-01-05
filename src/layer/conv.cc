@@ -50,6 +50,7 @@ void Conv::im2col(const Vector& image, Matrix& data_col) {
 }
 
 void Conv::forward(const Matrix& bottom) {
+  std::cout<<"conv forward"<<std::endl;
   int n_sample = bottom.cols();
   top.resize(height_out * width_out * channel_out, n_sample);
   data_cols.resize(n_sample);
