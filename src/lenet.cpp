@@ -4,9 +4,9 @@ Network create_lenet5_network(const std::string& parameter_filepath)
 {
     Network dnn;
 
-    Layer *conv1 = new Conv(1, 28, 28, 6, 5, 5);
+    Layer *conv1 = new Conv_CPU(1, 28, 28, 6, 5, 5);
     Layer *pool1 = new MaxPooling(6, 24, 24, 2, 2, 2);
-    Layer *conv2 = new Conv(6, 12, 12, 16, 5, 5);
+    Layer *conv2 = new Conv_CPU(6, 12, 12, 16, 5, 5);
     Layer *pool2 = new MaxPooling(16, 8, 8, 2, 2, 2);
     Layer *fc3 = new FullyConnected(pool2->output_dim(), 120);
     Layer *fc4 = new FullyConnected(120, 84);
@@ -51,7 +51,7 @@ Network create_lenet5_network_gpu(const std::string& parameter_filepath, bool mu
     Network dnn;
     Layer *conv1;
     if(multi_stream == false){
-        conv1 = new Conv_gpu(1, 28, 28, 6, 5, 5);
+        conv1 = new Conv_Custom(1, 28, 28, 6, 5, 5);
     }
     else{
         conv1 = new Conv_gpu(1, 28, 28, 6, 5, 5, 1, 0, 0, 3);
@@ -61,7 +61,7 @@ Network create_lenet5_network_gpu(const std::string& parameter_filepath, bool mu
 
     Layer *conv2;
     if(multi_stream == false){
-        conv2 = new Conv_gpu(6, 12, 12, 16, 5, 5);
+        conv2 = new Conv_Custom(6, 12, 12, 16, 5, 5);
     }
     else{
         conv2 = new Conv_gpu(6, 12, 12, 16, 5, 5, 1, 0, 0, 3);

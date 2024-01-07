@@ -42,18 +42,13 @@ int main()
     float acc_gpu = compute_accuracy(dnn_gpu.output(), dataset.test_labels);
     std::cout << "GPU accuracy: " << acc_gpu << std::endl << std::endl;
 
-
-
-    std::cout << "********Multi-stream GPU version*********" << std::endl;
-    bool multi_stream = true;
-    Network multi_stream_dnn = create_lenet5_network_gpu(parameter_filepath, multi_stream);
-
-    timer.Start();
-    multi_stream_dnn.forward(dataset.test_data);
-    timer.Stop();
-    std::cout << "Multi-stream GPU forward time: " << timer.Elapsed() / 1000 << " secs" << std::endl;
-    float acc_gpu_multi_stream = compute_accuracy(multi_stream_dnn.output(), dataset.test_labels);
-    std::cout << "Multi-stream GPU accuracy: " << acc_gpu << std::endl << std::endl;
-
-
+    // std::cout << "********Multi-stream GPU version*********" << std::endl;
+    // bool multi_stream = true;
+    // Network multi_stream_dnn = create_lenet5_network_gpu(parameter_filepath, multi_stream);
+    // timer.Start();
+    // multi_stream_dnn.forward(dataset.test_data);
+    // timer.Stop();
+    // std::cout << "Multi-stream GPU forward time: " << timer.Elapsed() / 1000 << " secs" << std::endl;
+    // float acc_gpu_multi_stream = compute_accuracy(multi_stream_dnn.output(), dataset.test_labels);
+    // std::cout << "Multi-stream GPU accuracy: " << acc_gpu << std::endl << std::endl;
 }
