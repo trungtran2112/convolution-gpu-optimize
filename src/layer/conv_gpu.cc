@@ -1,8 +1,7 @@
 #include "conv_gpu.h"
 #include <math.h>
 #include <iostream>
-
-#define BLOCK_SIZE 32
+using namespace std;
 
 void Conv_gpu::init()
 {
@@ -58,18 +57,19 @@ void Conv_gpu::im2col(const Vector &image, Matrix &data_col)
     }
 }
 
-void Conv_gpu::forward(const Matrix &bottom)
+void Conv_gpu::forward(const Matrix &bottom) //Matrix is all dataset
 {
-    int n_sample = bottom.cols();
-    data_cols.resize(n_sample);
+    int n_sample = bottom.cols(); 
     top.resize(height_out * width_out * channel_out, n_sample);
     
     float* in = (float*)bottom.data();
     float* out = (float*)top.data();
     float* w = (float*)weight.data();
-    
+
     cuda_manager executor;
-    executor.conv_forward(in, out, w, n_sample, channel_in, channel_out, height_in, width_in, height_kernel, n_streams);
+    executor.conv_forward_self1(in, out, w, n_sample, channel_in, channel_out, height_in, width_in, height_kernel, n_streams, kernel);
+
+    // executor.conv_forward(in, out, w, n_sample, channel_in, channel_out, height_in, width_in, height_kernel, n_streams);
 
     // Add bias
     // for (int i = 0; i < n_sample; i++) 

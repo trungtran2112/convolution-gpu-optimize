@@ -46,12 +46,19 @@ Network create_lenet5_network(const std::string& parameter_filepath)
 
 
 
-Network create_lenet5_network_gpu(const std::string& parameter_filepath, bool multi_stream)
+Network create_lenet5_network_gpu(const std::string& parameter_filepath, bool multi_stream, bool shared_mem)
 {
     Network dnn;
     Layer *conv1;
     if(multi_stream == false){
+      if (shared_mem == true)
+      {
+        conv1 = new Conv_gpu(1, 28, 28, 6, 5, 5,1,0,0,1,3);
+      }
+      else
+      {
         conv1 = new Conv_gpu(1, 28, 28, 6, 5, 5);
+      }
     }
     else{
         conv1 = new Conv_gpu(1, 28, 28, 6, 5, 5, 1, 0, 0, 3);
@@ -61,7 +68,14 @@ Network create_lenet5_network_gpu(const std::string& parameter_filepath, bool mu
 
     Layer *conv2;
     if(multi_stream == false){
+      if (shared_mem == true)
+      {
+        conv2 = new Conv_gpu(6, 12, 12, 16, 5, 5, 1, 0, 0, 1,3);
+      }
+      else
+      {
         conv2 = new Conv_gpu(6, 12, 12, 16, 5, 5);
+      }
     }
     else{
         conv2 = new Conv_gpu(6, 12, 12, 16, 5, 5, 1, 0, 0, 3);
