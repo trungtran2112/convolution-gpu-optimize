@@ -19,46 +19,45 @@ int main()
     std::cout << "\nFashion mnist test number: " << dataset.test_labels.cols() << std::endl << std::endl;
 
     GpuTimer timer;
-    std::cout << "**************CPU version**************" << std::endl;
+    std::cout << "<--------------CPU version-------------->" << std::endl;
     // create network
     Network dnn = create_lenet5_network(parameter_filepath);
 
     timer.Start();
     dnn.forward(dataset.test_data);
     timer.Stop();
-    std::cout << "CPU forward time: " << timer.Elapsed() / 1000 << " secs" << std::endl;
+    std::cout << "CPU total forward time: " << timer.Elapsed() / 1000 << " secs" << std::endl;
     float acc = compute_accuracy(dnn.output(), dataset.test_labels);
     std::cout << "CPU accuracy: " << acc << std::endl << std::endl;
 
-    std::cout << "*************Naive GPU version************" << std::endl;
+    std::cout << "<--------------Naive GPU version-------------->" << std::endl;
     Network dnn_gpu = create_lenet5_network_gpu(parameter_filepath);
 
     timer.Start();
     dnn_gpu.forward(dataset.test_data);
     timer.Stop();
-    std::cout << "GPU forward time: " << timer.Elapsed() / 1000 << " secs" << std::endl;
+    std::cout << "Naive GPU total forward time: " << timer.Elapsed() / 1000 << " secs" << std::endl;
     float acc_gpu = compute_accuracy(dnn_gpu.output(), dataset.test_labels);
-    std::cout << "GPU accuracy: " << acc_gpu << std::endl << std::endl;
+    std::cout << "Naive GPU accuracy: " << acc_gpu << std::endl << std::endl;
 
-    std::cout << "**************SMEM GPU version*************" << std::endl;
+    std::cout << "<--------------SMEM GPU version-------------->" << std::endl;
     Network shared_dnn = create_lenet5_network_gpu(parameter_filepath, cuda_kernel::shared);
 
     timer.Start();
     shared_dnn.forward(dataset.test_data);
     timer.Stop();
-    std::cout << "Shared Memory GPU forward time: " << timer.Elapsed() / 1000 << " secs" << std::endl;
+    std::cout << "Shared Memory GPU total forward time: " << timer.Elapsed() / 1000 << " secs" << std::endl;
     float acc_gpu_shared = compute_accuracy(shared_dnn.output(), dataset.test_labels);
     std::cout << "Shared Memory GPU accuracy: " << acc_gpu_shared << std::endl << std::endl;
 
 
-    std::cout << "**************SMEM + CMEM GPU version*************" << std::endl;
+    std::cout << "<--------------SMEM + CMEM GPU version-------------->" << std::endl;
     Network shared_const_dnn = create_lenet5_network_gpu(parameter_filepath, cuda_kernel::shared_constmem);
 
     timer.Start();
     shared_const_dnn.forward(dataset.test_data);
     timer.Stop();
-    std::cout << "Shared Memory GPU forward time: " << timer.Elapsed() / 1000 << " secs" << std::endl;
+    std::cout << "Shared Memory & Constant Memory GPU total forward time: " << timer.Elapsed() / 1000 << " secs" << std::endl;
     float acc_gpu_shared_const = compute_accuracy(shared_const_dnn.output(), dataset.test_labels);
-    std::cout << "Shared Memory GPU accuracy: " << acc_gpu_shared_const << std::endl << std::endl;
-
+    std::cout << "Shared Memory & Constant Memory GPU accuracy: " << acc_gpu_shared_const << std::endl << std::endl;
 }

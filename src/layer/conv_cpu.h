@@ -49,6 +49,8 @@ class Conv_CPU: public Layer {
   std::vector<float> get_parameters() const;
   std::vector<float> get_derivatives() const;
   void set_parameters(const std::vector<float>& param);
+
+  bool is_custom_convolution() { return true; }
 };
 
 #endif  // SRC_LAYER_CONV_CPU_H

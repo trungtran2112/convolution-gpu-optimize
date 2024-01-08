@@ -2,12 +2,33 @@
 
 void Network::forward(const Matrix &input)
 {
+  GptTimer timer;
   if (layers.empty())
     return;
+
+  if (layers[0]->is_custom_convolution())
+    timer.Start();
+
   layers[0]->forward(input);
+
+  if (layers[0]->is_custom_convolution())
+  {
+    timer.Stop();
+    std::cout << "Forward Convolution - Layer 0 - Forward Time: " << timer.Elapsed() / 1000 << "s" << std::endl;
+  }
+
   for (int i = 1; i < layers.size(); i++)
   {
+    if (layers[i]->is_custom_convolution())
+      timer.Start();
+
     layers[i]->forward(layers[i - 1]->output());
+
+    if (layers[i]->is_custom_convolution())
+    {
+      timer.Stop();
+      std::cout << "Forward Convolution - Layer " << i << " - Forward Time: " << timer.Elapsed() / 1000 << "s" << std::endl;
+    }
   }
 }
 
