@@ -48,7 +48,6 @@ void Conv_gpu::im2col(const Vector &image, Matrix &data_col)
                 }
                 else
                 {
-                    // int pick_idx = start_idx + (j / width_kernel) * width_in + j % width_kernel;
                     int pick_idx = cur_row * width_in + cur_col;
                     data_col(i, c * hw_kernel + j) = map(pick_idx); // pick which pixel
                 }

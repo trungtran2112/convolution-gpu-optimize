@@ -18,7 +18,7 @@ __global__ void conv_forward_kernel(const float *in, float *out, const float *we
     int width_grid = (width_out - 1) / TILE_WIDTH + 1; //2
 
     int sample_idx = blockIdx.z; //cho biết ảnh thứ mấy trong batch
-    int feature_map_idx = blockIdx.x; //cho biết đang xét kernel thứ mấy
+    int out_feature_idx = blockIdx.x; //cho biết đang xét kernel thứ mấy
 
     int row = (blockIdx.y / width_grid) * TILE_WIDTH + threadIdx.y; //tính cái dòng hiện tại trong input
     int col = (blockIdx.y % width_grid) * TILE_WIDTH + threadIdx.x; //tính cái cột hiện tại trong input
@@ -36,16 +36,16 @@ __global__ void conv_forward_kernel(const float *in, float *out, const float *we
           {
               for (int k = 0; k < kernel_width; k++)
               {
-                  int pixel_row = row + j;
-                  int pixel_col = col + k;
+                  int x = row + j;
+                  int y = col + k;
                   sum += in[sample_idx * channel_in * hw_in + i * hw_in + //sample_idx * channel_in * hw_in tính từ vị trí đầu đến channel khác
-                              pixel_row * width_in + pixel_col] *           //i * hw_in chọn lớp ảnh
-                          weight[feature_map_idx * channel_in * kernel_width * kernel_width +
+                              x * width_in + y] *           //i * hw_in chọn lớp ảnh
+                          weight[out_feature_idx * channel_in * kernel_width * kernel_width +
                               i * kernel_width * kernel_width + j * kernel_width + k];
               }
           }
       }
-      out[sample_idx * channel_out * hw_out + feature_map_idx * hw_out + row * width_out + col] = sum;
+      out[sample_idx * channel_out * hw_out + out_feature_idx * hw_out + row * width_out + col] = sum;
     }
 
     

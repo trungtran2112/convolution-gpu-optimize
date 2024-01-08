@@ -2,7 +2,6 @@
 #define SRC_LAYER_CONV_CPU_H_
 
 #include <vector>
-// #include <chrono>
 #include "../layer.h"
 #include "./cuda/cpu-new-forward.h"
 
