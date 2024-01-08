@@ -2,32 +2,35 @@
 
 void Network::forward(const Matrix &input)
 {
-  GptTimer timer;
+  std::chrono::_V2::system_clock::time_point start, end;
+  std::chrono::nanoseconds elapsed;
   if (layers.empty())
     return;
 
   if (layers[0]->is_custom_convolution())
-    timer.Start();
+    start = std::chrono::high_resolution_clock::now();
 
   layers[0]->forward(input);
 
   if (layers[0]->is_custom_convolution())
   {
-    timer.Stop();
-    std::cout << "Forward Convolution - Layer 0 - Forward Time: " << timer.Elapsed() / 1000 << "s" << std::endl;
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+    std::cout << "Forward Convolution - Layer 0 - Forward Time: " << elapsed.count() / 1000000000.0 << "s" << std::endl;
   }
 
   for (int i = 1; i < layers.size(); i++)
   {
     if (layers[i]->is_custom_convolution())
-      timer.Start();
+      start = std::chrono::high_resolution_clock::now();
 
     layers[i]->forward(layers[i - 1]->output());
 
     if (layers[i]->is_custom_convolution())
     {
-      timer.Stop();
-      std::cout << "Forward Convolution - Layer " << i << " - Forward Time: " << timer.Elapsed() / 1000 << "s" << std::endl;
+      end = std::chrono::high_resolution_clock::now();
+      elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+      std::cout << "Forward Convolution - Layer " << i << " - Forward Time: " << elapsed.count() / 1000000000.0 << "s" << std::endl;
     }
   }
 }

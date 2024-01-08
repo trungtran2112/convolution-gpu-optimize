@@ -4,11 +4,11 @@
 #include <stdlib.h>
 #include <vector>
 #include <fstream>
+#include <chrono>
 #include "./layer.h"
 #include "./loss.h"
 #include "./optimizer.h"
 #include "./utils.h"
-#include "./layer/cuda/cuda_utils.h"
 
 class Network {
  private:
