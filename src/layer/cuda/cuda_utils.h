@@ -1,5 +1,5 @@
-#ifndef SRC_LAYER_CUDA_HELPER_H_
-#define SRC_LAYER_CUDA_HELPER_H_
+#ifndef SRC_LAYER_CUDA_UTILS_H_
+#define SRC_LAYER_CUDA_UTILS_H_
 #pragma once
 
 #include <stdio.h>
@@ -56,13 +56,12 @@ public:
     }
 };
 
-class cuda_helper
+class cuda_utils
 {
 private:
     cudaDeviceProp prop;
 public:
-    char* concatenate(const char* a, const char* b);
     void print_device_info();
 };
 
-#endif /* SRC_LAYER_CUDA_HELPER_H_ */
+#endif /* SRC_LAYER_CUDA_UTILS_H_ */

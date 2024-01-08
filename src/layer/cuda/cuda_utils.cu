@@ -1,14 +1,7 @@
-#include "helper.h"
+#include "cuda_utils.h"
 
-char* cuda_helper::concatenate(const char *a, const char *b)
-{
-	char *result = (char *)malloc(strlen(a) + strlen(b) + 1);
-	strcpy(result, a);
-	strcat(result, b);
-	return result;
-}
 
-void cuda_helper::print_device_info()
+void cuda_utils::print_device_info()
 {
 	CHECK(cudaGetDeviceProperties(&prop, 0));
 	printf("**********GPU Device Properties**********\n");
