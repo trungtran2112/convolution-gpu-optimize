@@ -62,9 +62,9 @@ void Conv_gpu::forward(const Matrix &bottom) //Matrix is all dataset
     int n_sample = bottom.cols(); 
     top.resize(height_out * width_out * channel_out, n_sample);
     
-    float* in = (float*)bottom.data();
-    float* out = (float*)top.data();
-    float* w = (float*)weight.data();
+    float* in = (float*)bottom.data(); // this is input data
+    float* out = (float*)top.data(); // this is output data
+    float* w = (float*)weight.data(); // this is weight data
 
     cuda_kernel agent;
     agent.conv_forward(in, out, w, n_sample, channel_in, channel_out, height_in, width_in, height_kernel, kernel);

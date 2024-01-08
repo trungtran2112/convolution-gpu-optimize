@@ -10,8 +10,6 @@ int main()
     cuda_utils agent;
     agent.print_device_info();
     // should give absolute path
-    // const std::string fashion_mnist_directory = "D:\\Source Code\\Visual Studio Code\\mini-dnn-cpp - Copy\\data\\fashion mnist\\";
-    // const std::string parameter_filepath = "D:\\Source Code\\Visual Studio Code\\mini-dnn-cpp - Copy\\parameter\\weight.bin";
 
     const std::string fashion_mnist_directory = "../data/fashion mnist/";
     const std::string parameter_filepath = "../parameter/weight.bin";
@@ -31,8 +29,6 @@ int main()
     std::cout << "CPU forward time: " << timer.Elapsed() / 1000 << " secs" << std::endl;
     float acc = compute_accuracy(dnn.output(), dataset.test_labels);
     std::cout << "CPU accuracy: " << acc << std::endl << std::endl;
-
-
 
     std::cout << "*************Naive GPU version************" << std::endl;
     Network dnn_gpu = create_lenet5_network_gpu(parameter_filepath);

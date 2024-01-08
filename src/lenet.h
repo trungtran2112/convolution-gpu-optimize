@@ -15,7 +15,7 @@
  */
 
 #include "network.h"
-#include "./layer/conv.h"
+#include "./layer/conv_cpu.h"
 #include "./layer/max_pooling.h"
 #include "./layer/fully_connected.h"
 #include "./layer/softmax.h"
