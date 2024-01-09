@@ -14,7 +14,7 @@ __global__ void conv_forward_kernel(const float *in, float *out, const float *we
     const int height_out = height_in - kernel_width + 1; //24
     const int width_out = width_in - kernel_width + 1; //24
 
-    int height_grid = (height_out - 1) / TILE_WIDTH + 1; //2
+    // int height_grid = (height_out - 1) / TILE_WIDTH + 1; //2
     int width_grid = (width_out - 1) / TILE_WIDTH + 1; //2
 
     int sample_idx = blockIdx.z; //cho biết ảnh thứ mấy trong batch
